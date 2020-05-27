@@ -1,0 +1,101 @@
+{
+    "rule1":{
+        "perspective":"",
+        "severity":1,
+        "searchConditions":[{"condition":"<With>","decision":"true"}],
+        "message":"Don't start a sentence with \"With\".",
+        "correction":"Write \"With\" in a different way.",
+        "examples":[{"positive":"Windows Hello enables you to improve efficiency.","negative":"With Windows Hello, your efficiency is improved."}],
+        "ref_link":"http://www.microsoft.com/"
+    },
+    "rule2":{
+        "perspective":"VPC",
+        "severity":2,
+        "searchConditions":[{"condition":"<mode>","decision":"true"},{"condition":"<the [!,.！，。^13]@ mode>","decision":"false"}],
+        "message":"\the\" is missing for mode.",
+        "correction":"correction2",
+        "examples":[{"positive":"Run Windows in the safe mode.","negative":"Run Windows in safe mode."}],
+        "ref_link":"http://www.google.com/"
+    },
+    "rule3":{
+        "perspective":"VPC",
+        "severity":3,
+        "searchConditions":[{"condition":"<as shown in the following figure>","decision":"true"},{"condition":"<, as shown in the following figure>","decision":"false"}],
+        "message":"A comma is necessary before \"as shown in the following\".",
+        "correction":", as shown in the following",
+        "examples":[{"positive":"You can open Word through shortcut, as shown in the following figure","negative":""}],
+        "ref_link":"http://www.google.com/"
+    },
+    "rule4":{
+        "perspective":"VPC",
+        "severity":4,
+        "searchConditions":[{"condition":"<, shown in the following>","decision":"true"}],
+        "message":"Comma is not allowed before \"shown in the following\".",
+        "correction":"",
+        "examples":[{"positive":"The data is exported shown in the following figure.","negative":""}],
+        "ref_link":"http://www.google.com/"
+    },
+    "rule5":{
+        "perspective":"VPC",
+        "severity":1,
+        "searchConditions":[{"condition":"<[Ss]elf-built>","decision":"true"}],
+        "message":"When describing something that is created by users, use \"user-defined\".",
+        "correction":"user-defined rules",
+        "examples":[{"positive":"To use user-defined rules, import them first","negative":"To use self-built rules, import them first"}],
+        "ref_link":"http://www.google.com/"
+    },
+    "rule6":{
+        "perspective":"VPC",
+        "severity":2,
+        "searchConditions":[{"condition":"<[Oo]perate>","decision":"true"}],
+        "message":"Be specific to the actual operation.",
+        "correction":"Use click, delete, etc.",
+        "examples":[{"positive":"You can manage ECS in the following ways","negative":"You can operate ECS in the following ways."}],
+        "ref_link":"http://www.google.com/"
+    },
+    "rule7":{
+        "perspective":"VPC",
+        "severity":3,
+        "searchConditions":[{"condition":"<as follows>","decision":"true"}],
+        "message":"Don't use \"as follows\".",
+        "correction":"Replace it with something else.",
+        "examples":[{"positive":"To do this, follow these steps.","negative":"Use the steps as follows."}],
+        "ref_link":"http://www.google.com/"
+    },
+    "rule8":{
+        "perspective":"VPC",
+        "severity":4,
+        "searchConditions":[{"condition":"<[Ii]n [!,.！，。^13]@ page>","decision":"true"}],
+        "message":"Use \"on xxx page\".",
+        "correction":"on xxx page",
+        "examples":[{"positive":"On the Edit page, change your display name.","negative":"In the Edit page, change your display name."}],
+        "ref_link":"http://www.google.com/"
+    },
+    "rule9":{
+        "perspective":"VPC",
+        "severity":1,
+        "searchConditions":[{"condition":"<[Oo]n [!,.！，。^13]@ dialog>","decision":"true"}],
+        "message":"Use \"in xxx dialog\".",
+        "correction":"in xxx dialog",
+        "examples":[{"positive":"In the Manage VM dialog box, click Stop.","negative":"On the Manage VM dialog box, click Stop."}],
+        "ref_link":"http://www.google.com/"
+    },
+    "rule10":{
+        "perspective":"VPC",
+        "severity":2,
+        "searchConditions":[{"condition":", <see>","decision":"true"}, {"condition":"<information about (*), see>","decision":"false"}],
+        "message":"The sentence pattern is \"For information about ..., see\".",
+        "correction":"For more information about ECS, see ...",
+        "examples":[{"positive":"For more information about ECS, see this article.","negative":"For ECS, see this article"}],
+        "ref_link":"http://www.google.com/"
+    },
+    "rule11":{
+        "perspective":"VPC",
+        "severity":3,
+        "searchConditions":[{"condition":"<state>","decision":"true"}, {"condition":"<[A-Z][a-z0-9]@> state>","decision":"false"}],
+        "message":"The name of the state must start with an upper case letter.",
+        "correction":"Avaialble state",
+        "examples":[{"positive":"Change the VM to Available state","negative":"Change the VM to available state"}],
+        "ref_link":"http://www.google.com/"
+    }
+}
