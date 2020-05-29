@@ -5,7 +5,7 @@
   <ProviderName>Contoso</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="TermCompare"/>
-  <Description DefaultValue="A template to get started."/>
+  <Description DefaultValue="A ruled based document checking tool."/>
   <IconUrl DefaultValue="https://termcompare.azurewebsites.net/icon-32.png"/>
   <HighResolutionIconUrl DefaultValue="https://termcompare.azurewebsites.net/icon-80.png"/>
   <SupportUrl DefaultValue="https://www.contoso.com/help"/>
