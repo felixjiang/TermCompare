@@ -77,7 +77,7 @@
         <bt:String id="TaskpaneButton.Label" DefaultValue="TermCompare"/>
       </bt:ShortStrings>
       <bt:LongStrings>
-        <bt:String id="GetStarted.Description" DefaultValue="Your sample add-in loaded succesfully. Go to the HOME tab and click the 'TermCompare' button to get started."/>
+        <bt:String id="GetStarted.Description" DefaultValue="TermCompare loaded succesfully. Go to the HOME tab and click the 'TermCompare' button to get started."/>
         <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Enjoy TermCompare"/>
       </bt:LongStrings>
     </Resources>
