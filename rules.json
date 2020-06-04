@@ -1,101 +1,137 @@
 {
-    "rule1":{
-        "perspective":"",
-        "severity":1,
-        "searchConditions":[{"condition":"<With>","decision":"true"}],
-        "message":"Don't start a sentence with \"With\".",
-        "correction":"Write \"With\" in a different way.",
-        "examples":[{"positive":"Windows Hello enables you to improve efficiency.","negative":"With Windows Hello, your efficiency is improved."}],
-        "ref_link":"http://www.microsoft.com/"
-    },
-    "rule2":{
-        "perspective":"VPC",
-        "severity":2,
-        "searchConditions":[{"condition":"<mode>","decision":"true"},{"condition":"<the [!,.！，。^13]@ mode>","decision":"false"}],
-        "message":"\the\" is missing for mode.",
-        "correction":"correction2",
-        "examples":[{"positive":"Run Windows in the safe mode.","negative":"Run Windows in safe mode."}],
-        "ref_link":"http://www.google.com/"
-    },
-    "rule3":{
-        "perspective":"VPC",
-        "severity":3,
-        "searchConditions":[{"condition":"<as shown in the following figure>","decision":"true"},{"condition":"<, as shown in the following figure>","decision":"false"}],
-        "message":"A comma is necessary before \"as shown in the following\".",
-        "correction":", as shown in the following",
-        "examples":[{"positive":"You can open Word through shortcut, as shown in the following figure","negative":""}],
-        "ref_link":"http://www.google.com/"
-    },
-    "rule4":{
-        "perspective":"VPC",
-        "severity":4,
-        "searchConditions":[{"condition":"<, shown in the following>","decision":"true"}],
-        "message":"Comma is not allowed before \"shown in the following\".",
-        "correction":"",
-        "examples":[{"positive":"The data is exported shown in the following figure.","negative":""}],
-        "ref_link":"http://www.google.com/"
-    },
-    "rule5":{
-        "perspective":"VPC",
-        "severity":1,
-        "searchConditions":[{"condition":"<[Ss]elf-built>","decision":"true"}],
-        "message":"When describing something that is created by users, use \"user-defined\".",
-        "correction":"user-defined rules",
-        "examples":[{"positive":"To use user-defined rules, import them first","negative":"To use self-built rules, import them first"}],
-        "ref_link":"http://www.google.com/"
-    },
-    "rule6":{
-        "perspective":"VPC",
-        "severity":2,
-        "searchConditions":[{"condition":"<[Oo]perate>","decision":"true"}],
-        "message":"Be specific to the actual operation.",
-        "correction":"Use click, delete, etc.",
-        "examples":[{"positive":"You can manage ECS in the following ways","negative":"You can operate ECS in the following ways."}],
-        "ref_link":"http://www.google.com/"
-    },
-    "rule7":{
-        "perspective":"VPC",
-        "severity":3,
-        "searchConditions":[{"condition":"<as follows>","decision":"true"}],
-        "message":"Don't use \"as follows\".",
-        "correction":"Replace it with something else.",
-        "examples":[{"positive":"To do this, follow these steps.","negative":"Use the steps as follows."}],
-        "ref_link":"http://www.google.com/"
-    },
-    "rule8":{
-        "perspective":"VPC",
-        "severity":4,
-        "searchConditions":[{"condition":"<[Ii]n [!,.！，。^13]@ page>","decision":"true"}],
-        "message":"Use \"on xxx page\".",
-        "correction":"on xxx page",
-        "examples":[{"positive":"On the Edit page, change your display name.","negative":"In the Edit page, change your display name."}],
-        "ref_link":"http://www.google.com/"
-    },
-    "rule9":{
-        "perspective":"VPC",
-        "severity":1,
-        "searchConditions":[{"condition":"<[Oo]n [!,.！，。^13]@ dialog>","decision":"true"}],
-        "message":"Use \"in xxx dialog\".",
-        "correction":"in xxx dialog",
-        "examples":[{"positive":"In the Manage VM dialog box, click Stop.","negative":"On the Manage VM dialog box, click Stop."}],
-        "ref_link":"http://www.google.com/"
-    },
-    "rule10":{
-        "perspective":"VPC",
-        "severity":2,
-        "searchConditions":[{"condition":", <see>","decision":"true"}, {"condition":"<information about (*), see>","decision":"false"}],
-        "message":"The sentence pattern is \"For information about ..., see\".",
-        "correction":"For more information about ECS, see ...",
-        "examples":[{"positive":"For more information about ECS, see this article.","negative":"For ECS, see this article"}],
-        "ref_link":"http://www.google.com/"
-    },
-    "rule11":{
-        "perspective":"VPC",
-        "severity":3,
-        "searchConditions":[{"condition":"<state>","decision":"true"}, {"condition":"<[A-Z][a-z0-9]@> state>","decision":"false"}],
-        "message":"The name of the state must start with an upper case letter.",
-        "correction":"Avaialble state",
-        "examples":[{"positive":"Change the VM to Available state","negative":"Change the VM to available state"}],
-        "ref_link":"http://www.google.com/"
-    }
+"rule1":{"severity":3,"searchConditions":[{"condition":"<With>","decision":"true"}],"message":"Do not start a sentence with \"With.\"","correction":"Rewrite the sentence. See examples.","examples":[{"positive":"Windows Hello enables you to improve efficiency.","negative":"With Windows Hello, your efficiency is improved."}]}
+,"rule2":{"severity":3,"searchConditions":[{"condition":"<mode>","decision":"true"},{"condition":"<the [!,.！，。^13]@ mode>","decision":"false"}],"message":"You must use \"the\" before \"mode.\"","examples":[{"positive":"Run Windows in the safe mode.","negative":"Run Windows in safe mode."}]}
+,"rule3":{"severity":3,"searchConditions":[{"condition":"<as shown in the following figure>","decision":"true"},{"condition":", as shown in the following figure>","decision":"false"}],"message":"Add a comma (,) before \"as shown in the following.\"","correction":"Change to: \", as shown in the following\"","examples":[{"positive":"You can open Word through shortcut, as shown in the following figure.","negative":""}]}
+,"rule4":{"severity":3,"searchConditions":[{"condition":", shown in the following>","decision":"true"}],"message":"Do not use a comma before \"shown in the following.\"","examples":[{"positive":"The data is exported shown in the following figure.","negative":""}]}
+,"rule5":{"severity":3,"searchConditions":[{"condition":"<[Ss]elf-built>","decision":"true"}],"message":"When describing something that is created by users, use \"user-defined\".","correction":"Change to: \"user-defined\"","examples":[{"positive":"To use user-defined rules, import them first.","negative":"To use self-built rules, import them first."}]}
+,"rule6":{"severity":3,"searchConditions":[{"condition":"<[Oo]perate>","decision":"true"}],"message":"Replace with the actual operation, such as \"click\" and \"delete.\"","examples":[{"positive":"You can manage ECS in the following ways.","negative":"You can operate ECS in the following ways."}]}
+,"rule7":{"severity":3,"searchConditions":[{"condition":"<as follows>","decision":"true"}],"message":"Do not use \"as follows.\"","correction":"Rewrite the sentence. See examples.","examples":[{"positive":"To do this, follow these steps:","negative":"Use the steps as follows."}]}
+,"rule8":{"severity":3,"searchConditions":[{"condition":"<[Ii]n [!,.！，。^13]@ page","decision":"true"}],"message":"You must use \"on xxx page.\"","examples":[{"positive":"On the Edit page, change your display name.","negative":"In the Edit page, change your display name."}]}
+,"rule9":{"severity":3,"searchConditions":[{"condition":"<[Oo]n [!,.！，。^13]@ dialog","decision":"true"}],"message":"You must use \"in xxx dialog box.\"","examples":[{"positive":"In the Manage VM dialog box. click Stop.","negative":"On the Manage VM dialog box, click Stop."}]}
+,"rule10":{"severity":3,"searchConditions":[{"condition":", see>","decision":"true"},{"condition":"<information about [!,.！，。^13]@, see>","decision":"false"}],"message":"You must use the sentence pattern \"For more information about xxx, see xxx.\"","examples":[{"positive":"For more information about common response parameters, see Common parameters.","negative":"For common response parameters, see Common parameters."}]}
+,"rule11":{"severity":3,"searchConditions":[{"condition":"<state>","decision":"true"},{"condition":"<[A-Z][a-z0-9]@> state>","decision":"false"}],"message":"A state must start with an uppercase letter.","examples":[{"positive":"Change the VM to the Available state","negative":"Change the VM to available state"}]}
+,"rule12":{"severity":3,"searchConditions":[{"condition":"<[Ii]n [!,.！，。^13]@ text box>","decision":"true"}],"message":"Do not use \"text box\" to refer to \"field.\"","correction":"Change to: \"in the xxx field\"","examples":[{"positive":"Enter a data parsing script in the Edit Script field.","negative":"Enter a data parsing script in the Edit Script text box."},{"positive":"Enter a security group name in the Security Group Name field.","negative":"Enter a security group name in the Security Group Name text box."}]}
+,"rule13":{"severity":3,"searchConditions":[{"condition":"<[Ii]n [!,.！，。^13]@ textbox>","decision":"true"}],"message":"Spell as \"text box.\" Do not use \"text box\" to refer to \"field.\"","correction":"Change to: \"in the xxx field\"","examples":[{"positive":"Enter a data parsing script in the Edit Script field.","negative":"Enter a data parsing script in the Edit Script textbox."},{"positive":"Enter a security group name in the Security Group Name field.","negative":"Enter a security group name in the Security Group Name text box."}]}
+,"rule14":{"severity":3,"searchConditions":[{"condition":"<January>, [0-9]{4}","decision":"true"}],"message":"Do not use a comma (,) between a month and year.","correction":"Remove the comma (,)","examples":[{"positive":"January 2020","negative":"January, 2020"}]}
+,"rule15":{"severity":3,"searchConditions":[{"condition":"<February>, [0-9]{4}","decision":"true"}],"message":"Do not use a comma (,) between a month and year.","correction":"Remove the comma (,)","examples":[{"positive":"February 2020","negative":"February, 2020"}]}
+,"rule16":{"severity":3,"searchConditions":[{"condition":"<March>, [0-9]{4}","decision":"true"}],"message":"Do not use a comma (,) between a month and year.","correction":"Remove the comma (,)","examples":[{"positive":"March 2020","negative":"March, 2020"}]}
+,"rule17":{"severity":3,"searchConditions":[{"condition":"<April>, [0-9]{4}","decision":"true"}],"message":"Do not use a comma (,) between a month and year.","correction":"Remove the comma (,)","examples":[{"positive":"April 2020","negative":"April, 2020"}]}
+,"rule18":{"severity":3,"searchConditions":[{"condition":"<May>, [0-9]{4}","decision":"true"}],"message":"Do not use a comma (,) between a month and year.","correction":"Remove the comma (,)","examples":[{"positive":"May 2020","negative":"May, 2020"}]}
+,"rule19":{"severity":3,"searchConditions":[{"condition":"<June>, [0-9]{4}","decision":"true"}],"message":"Do not use a comma (,) between a month and year.","correction":"Remove the comma (,)","examples":[{"positive":"June 2020","negative":"June, 2020"}]}
+,"rule20":{"severity":3,"searchConditions":[{"condition":"<July>, [0-9]{4}","decision":"true"}],"message":"Do not use a comma (,) between a month and year.","correction":"Remove the comma (,)","examples":[{"positive":"July 2020","negative":"July, 2020"}]}
+,"rule21":{"severity":3,"searchConditions":[{"condition":"<August>, [0-9]{4}","decision":"true"}],"message":"Do not use a comma (,) between a month and year.","correction":"Remove the comma (,)","examples":[{"positive":"August 2020","negative":"August, 2020"}]}
+,"rule22":{"severity":3,"searchConditions":[{"condition":"<September>, [0-9]{4}","decision":"true"}],"message":"Do not use a comma (,) between a month and year.","correction":"Remove the comma (,)","examples":[{"positive":"September 2020","negative":"September, 2020"}]}
+,"rule23":{"severity":3,"searchConditions":[{"condition":"<October>, [0-9]{4}","decision":"true"}],"message":"Do not use a comma (,) between a month and year.","correction":"Remove the comma (,)","examples":[{"positive":"October 2020","negative":"October, 2020"}]}
+,"rule24":{"severity":3,"searchConditions":[{"condition":"<November>, [0-9]{4}","decision":"true"}],"message":"Do not use a comma (,) between a month and year.","correction":"Remove the comma (,)","examples":[{"positive":"November 2020","negative":"November, 2020"}]}
+,"rule25":{"severity":3,"searchConditions":[{"condition":"<December>, [0-9]{4}","decision":"true"}],"message":"Do not use a comma (,) between a month and year.","correction":"Remove the comma (,)","examples":[{"positive":"December 2020","negative":"December, 2020"}]}
+,"rule26":{"severity":2,"searchConditions":[{"condition":"<[Cc]urrently>","decision":"true"}],"message":"Do not use \"currently.\"","correction":"Remove \"currently\""}
+,"rule27":{"severity":2,"searchConditions":[{"condition":"<[Ss]uccessfully>","decision":"true"}],"message":"Do not use \"successfully.\"","correction":"Remove \"successfully\"","examples":[{"positive":"The instance is created.","negative":"The instance is successfully created."}]}
+,"rule28":{"severity":2,"searchConditions":[{"condition":"<[Ss]imply>","decision":"true"}],"message":"Do not use \"simply.\"","correction":"Remove \"successfully\"","examples":[{"positive":"To solve this problem, add a new rule that allows outbound traffic from the VPC.","negative":"To solve this problem, simply add a new rule that allows outbound traffic from the VPC."}]}
+,"rule29":{"severity":2,"searchConditions":[{"condition":"<[Rr]eally>","decision":"true"}],"message":"Do not use \"really.\"","correction":"Remove \"really\"","examples":[{"positive":"It is easy to get started with Alibaba Cloud.","negative":"It is really easy to get started with Alibaba Cloud."}]}
+,"rule30":{"severity":2,"searchConditions":[{"condition":"<[Qq]uickly>","decision":"true"}],"message":"Do not use \"quickly.\"","correction":"Remove \"quickly\"","examples":[{"positive":"You can follow this guide to create a basic ECS instance.","negative":"You can follow this guide to quickly create a basic ECS instance."}]}
+,"rule31":{"severity":2,"searchConditions":[{"condition":"<[Yy]et>","decision":"true"}],"message":"Do not use \"yet.\"","correction":"Remove \"yet\"","examples":[{"positive":"Click the Refresh button to check whether the instance is created yet.","negative":"Click the Refresh button to check whether the instance is created."}]}
+,"rule32":{"severity":3,"searchConditions":[{"condition":"<that appears>","decision":"true"},{"condition":"<the [!,.！，。^13]@ dialog box that appears>","decision":"true"}],"message":"Do not use \"that appears\" if the name of the dialog box is clear.","correction":"Remove \"that appears\"","examples":[{"positive":"In the Create Migration Task dialog box, set the migration task parameters.","negative":"In the Create Migration Task dialog box that appears, set the migration task parameters."},{"positive":"In the dialog box that appears, set the required parameters.","negative":""}]}
+,"rule33":{"severity":3,"searchConditions":[{"condition":"<that appears>","decision":"true"},{"condition":"<the [!,.！，。^13]@ page that appears>","decision":"true"}],"message":"Do not use \"that appears\" if the name of the page is clear.","correction":"Remove \"that appears\"","examples":[{"positive":"At the top of the Migration Tasks page, select the China (Qingdao) region.","negative":"At the top of the Migration Tasks page that appears, select the China (Qingdao) region."},{"positive":"At the top of the page that appears, select the region where your instance resides.","negative":""}]}
+,"rule34":{"severity":3,"searchConditions":[{"condition":"<that appears>","decision":"true"},{"condition":"<the [!,.！，。^13]@ pane that appears>","decision":"true"}],"message":"Do not use \"that appears\" if the name of the pane is clear.","correction":"Remove \"that appears\"","examples":[{"positive":"In the Create Group pane, click OK.","negative":"In the Create Group pane that appears, click OK."},{"positive":"In the left-side navigation pane, click Data Migration.","negative":""}]}
+,"rule35":{"severity":3,"searchConditions":[{"condition":"<that appears>","decision":"true"},{"condition":"<the [!,.！，。^13]@ message that appears>","decision":"true"}],"message":"Do not use \"that appears\" if the name of the message is clear.","correction":"Remove \"that appears\"","examples":[{"positive":"In the Confirm Settings message, click OK.","negative":"In the Confirm Settings message that appears, click OK."},{"positive":"In the message that appears, click OK.","negative":""}]}
+,"rule36":{"severity":3,"searchConditions":[{"condition":"<[Aa] HAVIP>","decision":"true"}],"message":"Do not use \"a\" before \"HAVIP.\"","correction":"Change to: \"an HAVIP\"","examples":[{"positive":"an HAVIP instance","negative":"a HAVIP instance"}]}
+,"rule37":{"severity":3,"searchConditions":[{"condition":"<[Aa] SNAT>","decision":"true"}],"message":"Do not use \"a\" before \"SNAT.\"","correction":"Change to: \"an SNAT\"","examples":[{"positive":"an SNAT rule","negative":"a SNAT rule"}]}
+,"rule38":{"severity":3,"searchConditions":[{"condition":"<[Aa] SLB>","decision":"true"}],"message":"Do not use \"a\" before \"SLB.\"","correction":"Change to: \"an SLB\"","examples":[{"positive":"an SLB instance","negative":"a SLB instance"}]}
+,"rule39":{"severity":3,"searchConditions":[{"condition":"<[Aa] MX>","decision":"true"}],"message":"Do not use \"a\" before \"MX.\"","correction":"Change to: \"an MX\"","examples":[{"positive":"an MX record","negative":"a MX record"}]}
+,"rule40":{"severity":3,"searchConditions":[{"condition":"<[Aa] NS>","decision":"true"}],"message":"Do not use \"a\" before \"NS.\"","correction":"Change to: \"an NS\"","examples":[{"positive":"an NS record","negative":"a NS record"}]}
+,"rule41":{"severity":3,"searchConditions":[{"condition":"<[Aa] SRV>","decision":"true"}],"message":"Do not use \"a\" before \"SRV.\"","correction":"Change to: \"an SRV\"","examples":[{"positive":"an SRV record","negative":"a SRV record"}]}
+,"rule42":{"severity":3,"searchConditions":[{"condition":"<[Aa] SOA>","decision":"true"}],"message":"Do not use \"a\" before \"SOA.\"","correction":"Change to: \"an SOA\"","examples":[{"positive":"an SRV record","negative":"a SOA record"}]}
+,"rule43":{"severity":3,"searchConditions":[{"condition":"<[Aa] SQL>","decision":"true"}],"message":"Do not use \"a\" before \"SQL.\"","correction":"Change to: \"an SQL\"","examples":[{"positive":"an SQL statement","negative":"a SQL statement"}]}
+,"rule44":{"severity":3,"searchConditions":[{"condition":"<[Aa] HTTP*>","decision":"true"}],"message":"Do not use \"a\" before \"HTTP.\"","correction":"Change to: \"an HTTP\"","examples":[{"positive":"an HTTP proxy","negative":"a HTTP proxy"},{"positive":"an HTTPS proxy","negative":"a HTTPS proxy"}]}
+,"rule45":{"severity":3,"searchConditions":[{"condition":"<[Aa]n NAS>","decision":"true"}],"message":"Do not use \"an\" before \"NAS.\"","correction":"Change to: \"a NAS\"","examples":[{"positive":"a NAS file system","negative":"an NAS file system"}]}
+,"rule46":{"severity":3,"searchConditions":[{"condition":"<[Aa] NFS>","decision":"true"}],"message":"Do not use \"a\" before \"NFS.\"","correction":"Change to: \"an NFS\"","examples":[{"positive":"an NFS server","negative":"a NFS server"}]}
+,"rule47":{"severity":3,"searchConditions":[{"condition":"<[Aa] RDS>","decision":"true"}],"message":"Do not use \"a\" before \"RDS.\"","correction":"Change to: \"an RDS\"","examples":[{"positive":"an RDS instance","negative":"a RDS instance"}]}
+,"rule48":{"severity":3,"searchConditions":[{"condition":"<[Aa]n RAM>","decision":"true"}],"message":"Do not use \"an\" before \"RAM.\"","correction":"Change to: \"a RAM\"","examples":[{"positive":"a RAM user","negative":"an RAM user"}]}
+,"rule49":{"severity":3,"searchConditions":[{"condition":"<[Aa]n unified>","decision":"true"}],"message":"Do not use \"an\" before \"unified.\"","correction":"Change to: \"a unified\"","examples":[{"positive":"a unified format","negative":"an unified format"}]}
+,"rule50":{"severity":3,"searchConditions":[{"condition":"<[Aa]n unique>","decision":"true"}],"message":"Do not use \"an\" before \"unique.\"","correction":"Change to: \"a unique\"","examples":[{"positive":"a unique name","negative":"an unique name"}]}
+,"rule51":{"severity":3,"searchConditions":[{"condition":"<[Aa]n user*>","decision":"true"}],"message":"Do not use \"an\" before \"user.\"","correction":"Change to: \"a user\"","examples":[{"positive":"a user","negative":"an user"},{"positive":"a username","negative":"an username"}]}
+,"rule52":{"severity":2,"searchConditions":[{"condition":"<is comprised of>","decision":"true"}],"message":"Do not use \"is comprised of.\" Use \"comprises\", \"is composed of\", or \"consists of.\"","examples":[{"positive":"The United States comprises 50 states.","negative":"The United States is comprised of 50 states."},{"positive":"The United States consists of 50 states.","negative":""}]}
+,"rule53":{"severity":3,"searchConditions":[{"condition":"<the [!,.！，。^13]@ command*>","decision":"true"},{"condition":"<[Ee]xecute>","decision":"true"}],"message":"Do not use \"execute the xxx command.\"","correction":"Change to: \"run the xxx command\"","examples":[{"positive":"You can run the following command to create a migration task: ","negative":""}]}
+,"rule54":{"severity":2,"searchConditions":[{"condition":"<[Ww]e recommend>","decision":"false"},{"condition":"<[Ww]e>","decision":"true"}],"message":"Do not use \"we\", except in the sentence pattern \"We recommend that you xxx.\"","correction":"Change to: \"you\", or rewrite the sentence","examples":[{"positive":"If you want to create an ECS instance, open the Apsara Stack console.","negative":"If we want to create an ECS instance, open the Apsara Stack console."},{"positive":"Open the Apsara Stack console to create an ECS instance.","negative":""}]}
+,"rule55":{"severity":2,"searchConditions":[{"condition":"<recommend[! ]*>","decision":"true"}],"message":"You must use the sentence pattern \"We recommend that you xxx.\"","examples":[{"positive":"We recommend that you clear the cache once a day.","negative":"It is recommended to clear the cache once a day."},{"positive":"We recommend that you perform the upgrade during off-peak hours.","negative":"Alibaba Cloud recommends that you perform the upgrade during off-peak hours."}]}
+,"rule56":{"severity":2,"searchConditions":[{"condition":"<not recommend that you>","decision":"true"}],"message":"You must use the sentence pattern \"We recommend that you do not xxx.\"","examples":[{"positive":"We recommend that you do not use \"the\" before product names.","negative":"We do not recommend that you use \"the\" before product names."},{"positive":"We recommend that you do not repeatedly perform this operation.","negative":"Alibaba Cloud does not recommend that you repeatedly perform this operation."}]}
+,"rule57":{"severity":1,"searchConditions":[{"condition":"<[Nn]on-[Aa]libaba [Cc]loud>","decision":"true"}],"message":"Do not join the trademark \"Alibaba Cloud\" with another word.","examples":[{"positive":"Use Logtail to collect logs from compute instances that are not Alibaba Cloud ECS instances.","negative":"Use Logtail to collect logs from non-Alibaba Cloud ECS instances."}]}
+,"rule58":{"severity":1,"searchConditions":[{"condition":"<[Aa]libaba [Cc]loud's>","decision":"true"}],"message":"Do not make the trademark \"Alibaba Cloud\" a possessive.","examples":[{"positive":"Tablestore is a NoSQL database service built on the Apsara distributed operating system of Alibaba Cloud.","negative":"Tablestore is a NoSQL database service built on Alibaba Cloud's Apsara distributed operating system."}]}
+,"rule59":{"severity":1,"searchConditions":[{"condition":"<Alibaba cloud>","decision":"true"}],"message":"The first letter of \"cloud\" must be capitalized.","correction":"Change to: \"Alibaba Cloud\""}
+,"rule60":{"severity":2,"searchConditions":[{"condition":"<IoT platform>","decision":"true"}],"message":"The first letter of \"platform\" must be capitalized.","correction":"Change to: \"IoT Platform\""}
+,"rule61":{"severity":3,"searchConditions":[{"condition":"<[Tt]he IoT Platform>","decision":"true"},{"condition":"<[Tt]he IoT Platform console>","decision":"false"}],"message":"Do not add \"the\" in front of an Alibaba Cloud service name.","correction":"Change to: \"IoT Platform\""}
+,"rule62":{"severity":2,"searchConditions":[{"condition":"<[Aa] [AEIOaeio]*>","decision":"true"}],"message":"Do not use \"a\" in front of a noun that starts with a vowel.","correction":"Change to: \"an\""}
+,"rule63":{"severity":3,"searchConditions":[{"condition":"<[Tt]here is>","decision":"true"}],"message":"Do not use the \"there+be\" structure.","correction":"Remove \"there be\" and use other expressions."}
+,"rule64":{"severity":3,"searchConditions":[{"condition":"<[Tt]here are>","decision":"true"}],"message":"Do not use the \"there+be\" structure.","correction":"Remove \"there be\" and use other expressions."}
+,"rule65":{"severity":3,"searchConditions":[{"condition":"<[Ii]t's>","decision":"true"}],"message":"Do not use \"it's\"","correction":"Change to: \"it is\""}
+,"rule66":{"severity":2,"searchConditions":[{"condition":";","decision":"true"}],"message":"Do not use semicolons.","correction":"Use periods (.)"}
+,"rule67":{"severity":3,"searchConditions":[{"condition":", <see> \"[!,.！，。^13]@.\"","decision":"true"}],"message":"Do not add quotation marks when you reference a document.","correction":"Remove quotation marks.","examples":[{"positive":"For more information, see XXX User Guide.","negative":"For more information, see \"XXX User Guide.\""}]}
+,"rule68":{"severity":2,"searchConditions":[{"condition":"<console>","decision":"true"},{"condition":"<the [!,.！，。^13]@ console>","decision":"false"}],"message":"You must use \"the\" before \"console.\"","correction":"Add \"the\" before \"console.\""}
+,"rule69":{"severity":1,"searchConditions":[{"condition":"[“””“‘’]","decision":"true"}],"message":"Do not use curved quotation marks (“ ”).","correction":"Use straight quotation marks (\" \")."}
+,"rule70":{"severity":2,"searchConditions":[{"condition":" :","decision":"true"}],"message":"Do not add a space in front of a colon.","correction":"Remove the extra space."}
+,"rule71":{"severity":2,"searchConditions":[{"condition":" [[?][!],.] ","decision":"true"}],"message":"Do not add a space in front of a \"?\", \"!\", \",\", or \".\" in a sentence.","correction":"Remove the extra space."}
+,"rule72":{"severity":3,"searchConditions":[{"condition":"~","decision":"true"}],"message":"Do not use a wave line when quoting a range.","correction":"Use a dash."}
+,"rule73":{"severity":3,"searchConditions":[{"condition":" ‒ ","decision":"true"}],"message":"Do not add spaces in front of or after a dash when quoting a range.","correction":"Remove the extra spaces."}
+,"rule74":{"severity":3,"searchConditions":[{"condition":"[[?].]\".","decision":"true"}],"message":"Do not use a second punctuation mark after the closing quotation mark.","correction":"Remove the final period (.)."}
+,"rule75":{"severity":2,"searchConditions":[{"condition":"<[0-9]@[+-×][0-9]@>","decision":"true"}],"message":"You must add a space before and after mathematical symbols except the division sign.","correction":"Add a space before and after mathematical symbols."}
+,"rule76":{"severity":2,"searchConditions":[{"condition":"<[0-9]@ / [0-9]@>","decision":"true"}],"message":"Do not add a space before or after the division sign (/).","correction":"Remove the extra spaces."}
+,"rule77":{"severity":2,"searchConditions":[{"condition":"<[Cc]trl + [A-Z]>","decision":"true"}],"message":"Do not add a space before or after the plus sign (+) in a keyboard shortcut combination.","correction":"Remove the extra spaces."}
+,"rule78":{"severity":3,"searchConditions":[{"condition":"<USD[0-9]@>","decision":"true"}],"message":"You must add a space after \"USD.\"","correction":"Add a space after \"USD.\"","examples":[{"positive":"Yearly sales grew to USD 300 million.","negative":"Yearly sales grew to USD300 million."}]}
+,"rule79":{"severity":3,"searchConditions":[{"condition":"<$[0-9]@>","decision":"true"}],"message":"Do not use \"$.\"","correction":"Change to: \"USD\"","examples":[{"positive":"Yearly sales grew to USD 300 million.","negative":"Yearly sales grew to $300 million."}]}
+,"rule80":{"severity":3,"searchConditions":[{"condition":"<[0-9]@ °","decision":"true"}],"message":"Do not add a space before the degree sign (°).","correction":"Remove the extra space."}
+,"rule81":{"severity":3,"searchConditions":[{"condition":"<[0-9]@ ± [0-9]@>","decision":"true"}],"message":"Do not add a space before and after a plus-minus sign (±).","correction":"Remove the extra space."}
+,"rule82":{"severity":3,"searchConditions":[{"condition":"[! ][><≥≤][!,.！，。^13]","decision":"true"}],"message":"You must add a space before and after the \">\", \"<, \"≥\", and \"≤\" signs.","correction":"Add spaces."}
+,"rule83":{"severity":3,"searchConditions":[{"condition":"<etc.","decision":"true"}],"message":"Do not use \"etc.\"","correction":"Remove \"etc.\""}
+,"rule84":{"severity":3,"searchConditions":[{"condition":"<and so on>","decision":"true"}],"message":"Do not use \"and so on\".","correction":"Remove \"and so on\""}
+,"rule85":{"severity":3,"searchConditions":[{"condition":"…","decision":"true"}],"message":"Do not use ellipses (…) except in GUIs.","correction":"Use \"for example\" or \"such as\" when listing examples."}
+,"rule86":{"severity":3,"searchConditions":[{"condition":"[!]","decision":"true"}],"message":"Do not use the exclamation point (!).","correction":"Use a period (.) to indicate the end of a sentence."}
+,"rule87":{"severity":2,"searchConditions":[{"condition":"n't>","decision":"true"}],"message":"Do not use the apostrophe to form contractions.","correction":"Write out the words in full.","examples":[{"positive":"Do not delete the table entry.","negative":"Don't delete the table entry."}]}
+,"rule88":{"severity":1,"searchConditions":[{"condition":"<[A-Z]@'s>","decision":"true"}],"message":"Do not use apostrophes (') to form the possessive case of product, service, or company names.","examples":[{"positive":"the benefits of ECS","negative":"ECS's benefits"}]}
+,"rule89":{"severity":3,"searchConditions":[{"condition":"<Local Area Network>","decision":"true"}],"message":"Do not capitalize \"local area network.\"","correction":"Change to: \"local area network\""}
+,"rule90":{"severity":3,"searchConditions":[{"condition":"<cf.","decision":"true"}],"message":"Do not use Latin abbreviations.","correction":"Change to: \"compare\""}
+,"rule91":{"severity":2,"searchConditions":[{"condition":"<e.g.","decision":"true"}],"message":"Do not use Latin abbreviations.","correction":"Change to: \"for example\" or \"such as\""}
+,"rule92":{"severity":3,"searchConditions":[{"condition":"<et al.","decision":"true"}],"message":"Do not use Latin abbreviations."}
+,"rule93":{"severity":3,"searchConditions":[{"condition":"<i.e.","decision":"true"}],"message":"Do not use Latin abbreviations.","correction":"Change to: \"that is\""}
+,"rule94":{"severity":3,"searchConditions":[{"condition":"<q.v.","decision":"true"}],"message":"Do not use Latin abbreviations.","correction":"Change to: \"see\""}
+,"rule95":{"severity":3,"searchConditions":[{"condition":"<viz.","decision":"true"}],"message":"Do not use Latin abbreviations.","correction":"Change to: \"namely\""}
+,"rule96":{"severity":3,"searchConditions":[{"condition":"<vs.","decision":"true"}],"message":"Do not use Latin abbreviations.","correction":"Change to: \"instead of\" or \"and\""}
+,"rule97":{"severity":2,"searchConditions":[{"condition":"<And>","decision":"true"}],"message":"Do not capitalize \"and.\"","correction":"Change to: \"and\""}
+,"rule98":{"severity":2,"searchConditions":[{"condition":"<Or>","decision":"true"}],"message":"Do not capitalize \"or.\"","correction":"Change to: \"or\""}
+,"rule99":{"severity":2,"searchConditions":[{"condition":"<[Cc]lick on>","decision":"true"}],"message":"Do not use \"click on xxx.\"","correction":"Change to: \"click xxx\"","examples":[{"positive":"Click the home button.","negative":"Click on the home button."}]}
+,"rule100":{"severity":2,"searchConditions":[{"condition":"<help [!,.！，。^13]@ to>","decision":"true"}],"message":"Do not use \"to\" after the verb \"help.\"","correction":"Remove \"to\"","examples":[{"positive":"This function helps you achieve the goal of remote disaster tolerance.","negative":"This function helps you to achieve the goal of remote disaster tolerance."}]}
+,"rule101":{"severity":2,"searchConditions":[{"condition":"<helps [!,.！，。^13]@ to>","decision":"true"}],"message":"Do not use \"to\" after the verb \"help.\"","correction":"Remove \"to\"","examples":[{"positive":"This function helps you achieve the goal of remote disaster tolerance.","negative":"This function helps you to achieve the goal of remote disaster tolerance."}]}
+,"rule102":{"severity":3,"searchConditions":[{"condition":"<onto>","decision":"true"}],"message":"Do not use \"onto\", such as \"onto the cloud.\"","correction":"Change to: \"in\", \"on\", or \"to\"","examples":[{"positive":"Migrate your compute service to Alibaba Cloud.","negative":"Migrate your compute service onto Alibaba Cloud."}]}
+,"rule103":{"severity":3,"searchConditions":[{"condition":"<[Ii]t is possible>","decision":"true"}],"message":"Do not use \"it is possible.\"","correction":"Rewrite the sentence. See examples.","examples":[{"positive":"It is possible that the user cannot activate this service.","negative":"The user may not be able to activate this service."}]}
+,"rule104":{"severity":3,"searchConditions":[{"condition":"<[Ii]t is required>","decision":"true"}],"message":"Do not use \"it is required.\"","correction":"Rewrite the sentence. See examples.","examples":[{"positive":"You must specify this parameter.","negative":"It is required to specify this parameter."}]}
+,"rule105":{"severity":3,"searchConditions":[{"condition":"<[Oo]ne or multiple>","decision":"true"}],"message":"Do not use \"one or multiple.\"","correction":"Change to: \"one or more\"","examples":[{"positive":"Creates one or more instances.","negative":"Creates one or multiple instances."}]}
+,"rule106":{"severity":3,"searchConditions":[{"condition":"<[Aa]ny>","decision":"true"}],"message":"Do not use \"any.\"","correction":"Change to: \"a\", \"an\", or \"all\", or rewrite the sentence","examples":[{"positive":"Select an instance from the cluster.","negative":"Select any instance from the cluster."}]}
+,"rule107":{"severity":3,"searchConditions":[{"condition":"<[Oo]ur>","decision":"true"}],"message":"Do not use \"our.\"","correction":"Rewrite the sentence. See examples.","examples":[{"positive":"For more information, see the style guide.","negative":"For more information, read our style guide."}]}
+,"rule108":{"severity":3,"searchConditions":[{"condition":"<[Cc]entre>","decision":"true"}],"message":"Do not use \"centre.\"","correction":"Change to: \"center\"","examples":[{"positive":"data center","negative":"data centre"}]}
+,"rule109":{"severity":3,"searchConditions":[{"condition":"<[Ll]icence>","decision":"true"}],"message":"Do not use \"licence.\"","correction":"Change to: \"license\""}
+,"rule110":{"severity":3,"searchConditions":[{"condition":"<[Dd]efence>","decision":"true"}],"message":"Do not use \"defence.\"","correction":"Change to: \"defense\""}
+,"rule111":{"severity":3,"searchConditions":[{"condition":"<[Cc]ancelled>","decision":"true"}],"message":"Do not use \"cancelled.\"","correction":"Change to: \"canceled\""}
+,"rule112":{"severity":3,"searchConditions":[{"condition":"<[Cc]ancelling>","decision":"true"}],"message":"Do not use \"cancelling.\"","correction":"Change to: \"canceling\""}
+,"rule113":{"severity":3,"searchConditions":[{"condition":"<[Cc]ancelation>","decision":"true"}],"message":"Do not use \"cancelation.\"","correction":"Change to: \"cancellation\""}
+,"rule114":{"severity":2,"searchConditions":[{"condition":"[! ][ ]{2,3}[! ]","decision":"true"}],"message":"Do not add extra spaces.","correction":"Remove extra spaces."}
+,"rule115":{"severity":1,"searchConditions":[{"condition":"[!^1-^127]","decision":"true"}],"message":"Do not use Chinese characters.","correction":"Use English characters."}
+,"rule116":{"severity":2,"searchConditions":[{"condition":"<[a-zA-Z]@s supports>","decision":"true"}],"message":"You must keep a concord between the subject and predicate.","correction":"Change to: \"support\""}
+,"rule117":{"severity":3,"searchConditions":[{"condition":"<[Aa] RRPC>","decision":"true"}],"message":"Do not use \"a\" before \"RRPC.\"","correction":"Change to: \"an\""}
+,"rule118":{"severity":3,"searchConditions":[{"condition":"<read-write splitting>","decision":"true"}],"message":"Do not use \"read-write splitting.\"","correction":"Change to: \"read/write splitting\"","examples":[{"positive":"You can apply for a read/write splitting address.","negative":"You can apply for a read-write splitting address."}]}
+,"rule119":{"severity":3,"searchConditions":[{"condition":"<active and standby>","decision":"true"}],"message":"Do not use \"active and standby.\"","correction":"Change to: \"active/standby\""}
+,"rule120":{"severity":3,"searchConditions":[{"condition":"<on or off switch>","decision":"true"}],"message":"Do not use \"on or off switch.\"","correction":"Change to: \"on/off switch\""}
+,"rule121":{"severity":3,"searchConditions":[{"condition":"<primary and secondary>","decision":"true"}],"message":"Do not use \"primary and secondary.\"","correction":"Change to: \"primary/secondary\""}
+,"rule122":{"severity":4,"searchConditions":[{"condition":"<[Mm]inute[(]s[)]","decision":"true"}],"message":"Do not use \"(s)\" to mean that a noun can be singular or plural.","correction":"Change to: \"minutes\""}
+,"rule123":{"severity":4,"searchConditions":[{"condition":"<[Mm]onth[(]s[)]","decision":"true"}],"message":"Do not use \"(s)\" to mean that a noun can be singular or plural.","correction":"Change to: \"months\""}
+,"rule124":{"severity":4,"searchConditions":[{"condition":"<[Yy]ear[(]s[)]","decision":"true"}],"message":"Do not use \"(s)\" to mean that a noun can be singular or plural.","correction":"Change to: \"years\""}
+,"rule125":{"severity":4,"searchConditions":[{"condition":"<[Dd]ay[(]s[)]","decision":"true"}],"message":"Do not use \"(s)\" to mean that a noun can be singular or plural.","correction":"Change to: \"days\""}
+,"rule126":{"severity":4,"searchConditions":[{"condition":"<[Hh]our[(]s[)]","decision":"true"}],"message":"Do not use \"(s)\" to mean that a noun can be singular or plural.","correction":"Change to: \"hours\""}
+,"rule127":{"severity":4,"searchConditions":[{"condition":"<[Ss]econd[(]s[)]","decision":"true"}],"message":"Do not use \"(s)\" to mean that a noun can be singular or plural.","correction":"Change to: \"seconds\""}
+,"rule128":{"severity":3,"searchConditions":[{"condition":"<[Nn]ginx>","decision":"true"}],"message":"Do not use non-official spellings such as \"nginx\" and \"Nginx.\"","correction":"Change to: \"NGINX\"","examples":[{"positive":"You can configure NGINX on the front end as an HTTPS proxy.","negative":"You can configure Nginx on the front end as an HTTPS proxy."}]}
+,"rule129":{"severity":2,"searchConditions":[{"condition":"<[Pp]ublic networks>","decision":"true"}],"message":"Do not use \"public networks.\"","correction":"Change to: \"Internet\""}
+,"rule130":{"severity":2,"searchConditions":[{"condition":"<[Pp]ublic IP [Aa]ddress>","decision":"true"}],"message":"Do not use \"public IP address.\"","correction":"Change to: \"Internet IP address\""}
+,"rule131":{"severity":2,"searchConditions":[{"condition":"<[Ii]ntranet>","decision":"true"}],"message":"Do not use \"Intranet.\"","correction":"Change to: \"Internal networks\""}
+,"rule132":{"severity":1,"searchConditions":[{"condition":"<[Ss]hould>","decision":"true"}],"message":"Do not use \"should.\"","correction":"Change to: \"must\""}
+,"rule133":{"severity":2,"searchConditions":[{"condition":"<Before [a-z]@ing>","decision":"true"}],"message":"Do not use \"Before doing…, you must do…\"","correction":"Change to: \"Before you do…, do…\""}
+,"rule134":{"severity":2,"searchConditions":[{"condition":"<After [a-z]@ing>","decision":"true"}],"message":"Do not use \"After doing…, you must do…\"","correction":"Change to: \"After you do…, do…\""}
+,"rule135":{"severity":2,"searchConditions":[{"condition":"<When [a-z]@ing>","decision":"true"}],"message":"Do not use \"When doing…, you must do…\"","correction":"Change to: \"When you do…, do…\""}
 }
