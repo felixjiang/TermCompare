@@ -12,11 +12,10 @@ WHERE sentence IN ('With Windows Hello as shown in the following figure, you can
 DELETE log
 FROM log INNER JOIN ( 
 	SELECT MIN(id) id, sentence, rule_hit, COUNT(rule_hit) AS count FROM log
-	WHERE id > 968
 	GROUP BY sentence, rule_hit
 	HAVING COUNT(rule_hit) > 1) b
-WHERE log.sentence = b.sentence AND log.rule_hit=b.rule_hit AND log.id <> b.id AND log.id > 968;
- 
+WHERE log.sentence = b.sentence AND log.rule_hit=b.rule_hit AND log.id <> b.id;
+
 SELECT a.WEEK, total, false_pos, ROUND(false_pos/total*100,2) AS false_pos_rate FROM
 (SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK, COUNT(sentence) AS total FROM log
 GROUP BY WEEK) a
@@ -29,10 +28,11 @@ ORDER BY 1;
 
 SELECT check_date, sentence, rule_hit, datediff(check_date,'2020-06-26') DIV 7 + 1 AS week FROM log
 WHERE feedback = 'false'
-AND datediff(check_date,'2020-06-26') DIV 7 + 1 IN (3,4,5);
-
+-- AND datediff(check_date,'2020-06-26') DIV 7 + 1 IN (3,4,5);
 
 /*
+SELECT * FROM log
+
 CREATE TABLE log_bak (
 check_date DATETIME,
 sentence VARCHAR(2000),
