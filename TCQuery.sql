@@ -5,7 +5,7 @@ WHERE sentence IN ('With Windows Hello as shown in the following figure, you can
 'On the Status page above, you can see the availability state of the VMs.',
 'SRXEditor includes a sample file in SRX 2.0 format with a default set of segmentation rules supporting most standard cases as follows.',
 'In this page, it also includes segmentation rules specific for these languages.',
-'For some programming scenarios in Office Add-ins that use one of the host-specific API models (for Excel, Word, OneNote, and Visio).',
+'For some programming scenarios in Office Add-ins that use one of the host-specific API models (for Unix, Excel, Word, OneNote, and Visio).',
 'Your code needs to read, write, or process some property on the dialog box from every member of a collection object.'
 );
 
