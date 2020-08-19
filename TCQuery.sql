@@ -67,8 +67,3 @@ ALTER TABLE log CHANGE id id int NOT NULL AUTO_INCREMENT PRIMARY KEY;
 
 DROP TABLE log_bak;
 */
-
-SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK, )
-FROM (
-SELECT *, user_guid AS launches FROM log) AA
-GROUP BY WEEK
