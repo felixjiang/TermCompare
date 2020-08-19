@@ -16,8 +16,8 @@ FROM log INNER JOIN (
 	HAVING COUNT(rule_hit) > 1) b
 WHERE log.sentence = b.sentence AND log.rule_hit=b.rule_hit AND log.id <> b.id;
 
-SELECT a.WEEK, total, false_pos, ROUND(false_pos/total*100,2) AS false_pos_rate FROM
-(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK, COUNT(sentence) AS total FROM log
+SELECT a.WEEK AS week, launches, runs, total_issues, false_pos, ROUND(false_pos/total_issues*100,2) AS false_pos_rate FROM
+(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK, COUNT(sentence) AS total_issues, COUNT(user_guid) AS runs, COUNT(DISTINCT LEFT(user_guid, 37)) as launches FROM log
 GROUP BY WEEK) a
 INNER JOIN 
 (SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK, COUNT(sentence) as false_pos FROM log
@@ -27,20 +27,22 @@ ON a.week = b.week
 ORDER BY 1;
 
 SELECT check_date, sentence, rule_hit, datediff(check_date,'2020-06-26') DIV 7 + 1 AS week FROM log
-WHERE feedback = 'false'
+WHERE feedback = 'false';
 -- AND datediff(check_date,'2020-06-26') DIV 7 + 1 IN (3,4,5);
 
-/*
-SELECT * FROM log
+SELECT * FROM log;
 
+/*
 CREATE TABLE log_bak (
 check_date DATETIME,
 sentence VARCHAR(2000),
 rule_hit SMALLINT UNSIGNED,
-feedback VARCHAR(50));
+feedback VARCHAR(50),
+ip_location VARCHAR(50),
+user_guid VARCHAR(50));
 
 INSERT INTO log_bak
-SELECT check_date, sentence, rule_hit, feedback
+SELECT check_date, sentence, rule_hit, feedback, ip_location, user_guid
 FROM log
 ORDER BY id;
 
@@ -65,3 +67,8 @@ ALTER TABLE log CHANGE id id int NOT NULL AUTO_INCREMENT PRIMARY KEY;
 
 DROP TABLE log_bak;
 */
+
+SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK, )
+FROM (
+SELECT *, user_guid AS launches FROM log) AA
+GROUP BY WEEK
