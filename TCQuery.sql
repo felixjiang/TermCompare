@@ -16,14 +16,19 @@ FROM log INNER JOIN (
 	HAVING COUNT(rule_hit) > 1) b
 WHERE log.sentence = b.sentence AND log.rule_hit=b.rule_hit AND log.id <> b.id;
 
-SELECT a.WEEK AS week, launches, runs, total_issues, false_pos, ROUND(false_pos/total_issues*100,2) AS false_pos_rate FROM
-(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK, COUNT(sentence) AS total_issues, COUNT(user_guid) AS runs, COUNT(DISTINCT LEFT(user_guid, 37)) as launches FROM log
+SELECT a.WEEK AS week, unique_users, sessions, runs, total_issues, false_pos, CONCAT(ROUND(false_pos/total_issues*100,2),'%') AS false_pos_rate FROM
+(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS week, COUNT(sentence) AS total_issues, COUNT(DISTINCT user_guid) AS unique_users, COUNT(DISTINCT LEFT(session_guid, 37)) as sessions FROM log
 GROUP BY WEEK) a
 INNER JOIN 
-(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK, COUNT(sentence) as false_pos FROM log
+(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS week, COUNT(sentence) as false_pos FROM log
 WHERE feedback = 'false'
 GROUP BY WEEK) b
-ON a.week = b.week
+INNER JOIN
+(SELECT WEEK, SUM(runs) AS runs FROM 
+(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS week, CONVERT(MAX(IFNULL(SUBSTRING(session_guid,38,2),'0')), UNSIGNED) AS runs FROM log
+GROUP BY WEEK, LEFT(session_guid, 37)) z
+GROUP BY week) c
+ON a.week = b.week AND b.week=c.week
 ORDER BY 1;
 
 SELECT check_date, sentence, rule_hit, datediff(check_date,'2020-06-26') DIV 7 + 1 AS week FROM log
