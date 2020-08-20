@@ -1,3 +1,5 @@
+USE term_compare;
+
 Delete from log
 WHERE sentence IN ('With Windows Hello as shown in the following figure, you can accomplish a lot of things.', 
 'For example, you can add a matching self-built cover page, header, and sidebar.',
