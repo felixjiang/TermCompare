@@ -1,3 +1,6 @@
+-- 译员数量（总共 ):
+-- 西安：14, 杭州：8, 北京：16, 上海：9, LBT：30, 舜禹：17
+
 USE term_compare;
 
 Delete from log
