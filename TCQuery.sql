@@ -3,7 +3,9 @@
 
 USE term_compare;
 
-DELETE FROM log  
+DELETE perf 
+FROM perf INNER JOIN log
+ON perf.user_guid = log.user_guid
 WHERE sentence IN ('With Windows Hello on Unix as shown in the following figure, you can accomplish a lot of things in self-built Unix.',
 'For example, you can add a matching self-built cover page, header, and sidebar.',
 'Click Insert and then choose the elements you want to operate from the different galleries.',
@@ -17,9 +19,7 @@ WHERE sentence IN ('With Windows Hello on Unix as shown in the following figure,
 DELETE FROM perf
 WHERE word_count IS NULL;
 
-DELETE perf 
-FROM perf INNER JOIN log
-ON perf.user_guid = log.user_guid
+DELETE FROM log  
 WHERE sentence IN ('With Windows Hello on Unix as shown in the following figure, you can accomplish a lot of things in self-built Unix.',
 'For example, you can add a matching self-built cover page, header, and sidebar.',
 'Click Insert and then choose the elements you want to operate from the different galleries.',
