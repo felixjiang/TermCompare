@@ -3,16 +3,31 @@
 
 USE term_compare;
 
-Delete from log
-WHERE sentence IN ('With Windows Hello as shown in the following figure, you can accomplish a lot of things.', 
+DELETE FROM log  
+WHERE sentence IN ('With Windows Hello on Unix as shown in the following figure, you can accomplish a lot of things in self-built Unix.',
 'For example, you can add a matching self-built cover page, header, and sidebar.',
 'Click Insert and then choose the elements you want to operate from the different galleries.',
 'On the Status page above, you can see the availability state of the VMs.',
 'SRXEditor includes a sample file in SRX 2.0 format with a default set of segmentation rules supporting most standard cases as follows.',
 'In this page, it also includes segmentation rules specific for these languages.',
 'For some programming scenarios in Office Add-ins that use one of the host-specific API models (for Unix, Excel, Word, OneNote, and Visio).',
-'Your code needs to read, write, or process some property on the dialog box from every member of a collection object.',
-'With Windows Hello on Unix as shown in the following figure, you can accomplish a lot of things in self-built Unix.'
+'Your code needs to read, write, or process some property on the dialog box from every member of a collection object.'
+);
+
+DELETE FROM perf
+WHERE word_count IS NULL;
+
+Delete perf 
+FROM perf INNER JOIN log
+ON perf.user_guid = log.user_guid
+WHERE sentence IN ('With Windows Hello on Unix as shown in the following figure, you can accomplish a lot of things in self-built Unix.',
+'For example, you can add a matching self-built cover page, header, and sidebar.',
+'Click Insert and then choose the elements you want to operate from the different galleries.',
+'On the Status page above, you can see the availability state of the VMs.',
+'SRXEditor includes a sample file in SRX 2.0 format with a default set of segmentation rules supporting most standard cases as follows.',
+'In this page, it also includes segmentation rules specific for these languages.',
+'For some programming scenarios in Office Add-ins that use one of the host-specific API models (for Unix, Excel, Word, OneNote, and Visio).',
+'Your code needs to read, write, or process some property on the dialog box from every member of a collection object.'
 );
 
 DELETE log
@@ -64,7 +79,41 @@ SELECT check_date, sentence, rule_hit, datediff(check_date,'2020-06-26') DIV 7 +
 WHERE feedback = 'false';
 -- AND datediff(check_date,'2020-06-26') DIV 7 + 1 IN (3,4,5);
 
+SELECT user_guid, session_guid, word_count, check_type, 
+CASE
+	WHEN loading = 0 THEN 0
+	ELSE loading - start_check
+END AS loading_time,
+CASE
+	WHEN checking = 0 THEN 0
+	ELSE checking - loading
+END AS checking_time FROM 
+(SELECT user_guid, session_guid, MAX(word_count) AS word_count, 
+	CONCAT(CASE
+		WHEN EVENT = 'Start CheckAll' THEN 'CheckAll'
+		WHEN EVENT = 'Start CheckRange' THEN 'CheckRange'
+		WHEN EVENT = 'Start CheckRest' THEN 'CheckRest'
+		ELSE ''
+	END) AS check_type,
+	SUM(CASE
+		WHEN EVENT like"Start Check%" THEN ms
+		ELSE 0
+	END) AS start_check,
+	SUM(CASE
+		WHEN EVENT = 'Loading completes' THEN ms
+		ELSE 0
+	END) AS loading,
+	SUM(CASE
+		WHEN EVENT = 'Check Completes' THEN ms
+		ELSE 0
+	END) AS checking
+FROM perf
+GROUP BY user_guid, session_guid
+ORDER BY 1,2) a;
+
 SELECT * FROM log;
+
+SELECT * FROM perf;
 
 /*
 CREATE TABLE log_bak (
