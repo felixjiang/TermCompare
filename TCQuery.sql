@@ -17,7 +17,7 @@ WHERE sentence IN ('With Windows Hello on Unix as shown in the following figure,
 DELETE FROM perf
 WHERE word_count IS NULL;
 
-Delete perf 
+DELETE perf 
 FROM perf INNER JOIN log
 ON perf.user_guid = log.user_guid
 WHERE sentence IN ('With Windows Hello on Unix as shown in the following figure, you can accomplish a lot of things in self-built Unix.',
