@@ -71,7 +71,7 @@ WHERE feedback = 'false'
 ORDER BY 1;
 -- AND datediff(check_date,'2020-06-26') DIV 7 + 1 IN (3,4,5);
 
-SELECT ip_location, location, b.user_guid, b.session_guid, word_count, check_type, 
+SELECT DISTINCT a.user_guid, a.session_guid, b.ip_location, c.location, word_count, check_type, 
 CASE
 	WHEN loading = 0 THEN 0
 	ELSE loading - start_check
@@ -100,9 +100,8 @@ END AS checking_time FROM
 		ELSE 0
 	END) AS checking
 FROM perf
-GROUP BY user_guid, session_guid
-ORDER BY 1,2) a
-INNER JOIN log b ON a.user_guid=b.user_guid AND a.session_guid=b.session_guid
+GROUP BY user_guid, session_guid) a
+INNER JOIN log b ON a.user_guid = b.user_guid AND a.session_guid = b.session_guid
 LEFT JOIN ip_location c ON b.ip_location = c.ip;
 
 SELECT * FROM log;
