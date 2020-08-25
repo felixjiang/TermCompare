@@ -3,7 +3,7 @@
 
 USE term_compare;
 
-DELETE perf 
+/*DELETE perf 
 FROM perf INNER JOIN log
 ON perf.user_guid = log.user_guid
 WHERE sentence IN ('With Windows Hello on Unix as shown in the following figure, you can accomplish a lot of things in self-built Unix.',
@@ -17,7 +17,7 @@ WHERE sentence IN ('With Windows Hello on Unix as shown in the following figure,
 );
 
 DELETE FROM perf
-WHERE word_count IS NULL;
+WHERE word_count IS NULL;*/
 
 DELETE FROM log  
 WHERE sentence IN ('With Windows Hello on Unix as shown in the following figure, you can accomplish a lot of things in self-built Unix.',
@@ -52,34 +52,26 @@ WHERE session_guid = '';
 SELECT a.WEEK AS week, unique_users, sessions, runs, total_issues, false_pos, CONCAT(ROUND(false_pos/total_issues*100,2),'%') AS false_pos_rate FROM
 (SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS week, COUNT(sentence) AS total_issues, COUNT(DISTINCT user_guid) AS unique_users, COUNT(DISTINCT LEFT(session_guid, 37)) as sessions FROM log
 GROUP BY WEEK) a
-INNER JOIN 
+LEFT JOIN 
 (SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS week, COUNT(sentence) as false_pos FROM log
 WHERE feedback = 'false'
 GROUP BY WEEK) b
+ON a.week = b.week
 INNER JOIN
 (SELECT WEEK, SUM(runs) AS runs FROM 
 (SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS week, CONVERT(MAX(IFNULL(SUBSTRING(session_guid,38,2),'0')), UNSIGNED) AS runs FROM log
 GROUP BY WEEK, LEFT(session_guid, 37)) z
 GROUP BY week) c
-ON a.week = b.week AND b.week=c.week
+ON a.week=c.week
 ORDER BY 1;
 
-SELECT unique_users, sessions, runs, total_issues, false_pos, CONCAT(ROUND(false_pos/total_issues*100,2),'%') AS false_pos_rate FROM
-(SELECT COUNT(sentence) AS total_issues, COUNT(DISTINCT user_guid) AS unique_users, COUNT(DISTINCT LEFT(session_guid, 37)) as sessions FROM log) a
-JOIN 
-(SELECT COUNT(sentence) as false_pos FROM log
-WHERE feedback = 'false') b
-JOIN
-(SELECT SUM(runs) AS runs FROM 
-(SELECT CONVERT(MAX(IFNULL(SUBSTRING(session_guid,38,2),'0')), UNSIGNED) AS runs FROM log
-GROUP BY LEFT(session_guid, 37)) z
-) c;
-
-SELECT check_date, sentence, rule_hit, datediff(check_date,'2020-06-26') DIV 7 + 1 AS week FROM log
-WHERE feedback = 'false';
+SELECT check_date, location, sentence, rule_hit, datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK
+FROM log a INNER JOIN ip_location b ON a.ip_location = b.ip
+WHERE feedback = 'false'
+ORDER BY 1;
 -- AND datediff(check_date,'2020-06-26') DIV 7 + 1 IN (3,4,5);
 
-SELECT user_guid, session_guid, word_count, check_type, 
+SELECT ip_location, location, b.user_guid, b.session_guid, word_count, check_type, 
 CASE
 	WHEN loading = 0 THEN 0
 	ELSE loading - start_check
@@ -109,11 +101,19 @@ END AS checking_time FROM
 	END) AS checking
 FROM perf
 GROUP BY user_guid, session_guid
-ORDER BY 1,2) a;
+ORDER BY 1,2) a
+INNER JOIN log b ON a.user_guid=b.user_guid AND a.session_guid=b.session_guid
+LEFT JOIN ip_location c ON b.ip_location = c.ip;
 
 SELECT * FROM log;
 
 SELECT * FROM perf;
+
+SELECT DISTINCT ip_location AS missing_ip_info FROM log
+WHERE ip_location NOT IN (
+SELECT ip FROM ip_location);
+
+-- insert into ip_location (ip, location) values ('112.3.232.157','江苏南京');
 
 /*
 CREATE TABLE log_bak (
