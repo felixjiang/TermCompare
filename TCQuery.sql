@@ -108,7 +108,7 @@ SELECT * FROM log;
 
 SELECT * FROM perf;
 
-SELECT DISTINCT ip_location AS missing_ip_info FROM log
+SELECT DISTINCT ip_location AS missing_ip FROM log
 WHERE ip_location NOT IN (
 SELECT ip FROM ip_location);
 
