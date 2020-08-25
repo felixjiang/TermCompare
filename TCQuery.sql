@@ -71,7 +71,7 @@ WHERE feedback = 'false'
 ORDER BY 1;
 -- AND datediff(check_date,'2020-06-26') DIV 7 + 1 IN (3,4,5);
 
-SELECT DISTINCT a.user_guid, a.session_guid, b.ip_location, c.location, word_count, check_type, 
+SELECT DISTINCT b.check_date, a.user_guid, a.session_guid, b.ip_location, c.location, word_count, check_type, 
 CASE
 	WHEN loading = 0 THEN 0
 	ELSE loading - start_check
@@ -113,7 +113,7 @@ SELECT DISTINCT ip_location AS missing_ip FROM log
 WHERE ip_location NOT IN (
 SELECT ip FROM ip_location);
 
--- insert into ip_location (ip, location) values ('112.3.232.157','江苏南京');
+-- insert into ip_location (ip, location) values ('103.43.85.193','中国香港');
 
 /*
 CREATE TABLE log_bak (
