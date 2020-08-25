@@ -66,7 +66,7 @@ ON a.week=c.week
 ORDER BY 1;
 
 SELECT check_date, location, sentence, rule_hit, datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK
-FROM log a INNER JOIN ip_location b ON a.ip_location = b.ip
+FROM log a LEFT JOIN ip_location b ON a.ip_location = b.ip
 WHERE feedback = 'false'
 ORDER BY 1;
 -- AND datediff(check_date,'2020-06-26') DIV 7 + 1 IN (3,4,5);
@@ -102,7 +102,8 @@ END AS checking_time FROM
 FROM perf
 GROUP BY user_guid, session_guid) a
 INNER JOIN log b ON a.user_guid = b.user_guid AND a.session_guid = b.session_guid
-LEFT JOIN ip_location c ON b.ip_location = c.ip;
+LEFT JOIN ip_location c ON b.ip_location = c.ip
+ORDER BY b.check_date;
 
 SELECT * FROM log;
 
