@@ -41,6 +41,9 @@ UPDATE log
 SET user_guid = NULL
 WHERE user_guid = '';
 
+-- UPDATE log
+-- SET sentence = REPLACE(sentence,'\t','');
+
 UPDATE log
 SET ip_location = NULL
 WHERE ip_location = '';
@@ -49,28 +52,63 @@ UPDATE log
 SET session_guid = NULL
 WHERE session_guid = '';
 
-SELECT a.WEEK AS week, unique_users, sessions, runs, total_issues, false_pos, CONCAT(ROUND(false_pos/total_issues*100,2),'%') AS false_pos_rate FROM
-(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS week, COUNT(sentence) AS total_issues, COUNT(DISTINCT user_guid) AS unique_users, COUNT(DISTINCT LEFT(session_guid, 37)) as sessions FROM log
+-- 整体概况
+SELECT a.WEEK, 用户数, 运行次数, 检查次数, 反馈条数, 误报条数, CONCAT(ROUND(误报条数*100/反馈条数, 2),'%') AS 误报率, 修正规则, 驳回, 真正误报,
+CONCAT(ROUND((真正误报+修正规则)*100/反馈条数, 2),'%') AS 修正误报率, 反馈条数-修正规则-真正误报 AS 发现问题 FROM
+(SELECT WEEK,COUNT(sentence) AS 反馈条数, COUNT(DISTINCT user_guid) AS 用户数, COUNT(DISTINCT LEFT(session_guid, 37)) as 运行次数 FROM log_view
 GROUP BY WEEK) a
-LEFT JOIN 
-(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS week, COUNT(sentence) as false_pos FROM log
+LEFT JOIN
+(SELECT WEEK,COUNT(sentence) AS 误报条数 FROM log_view
 WHERE feedback = 'false'
 GROUP BY WEEK) b
 ON a.week = b.week
-INNER JOIN
-(SELECT WEEK, SUM(runs) AS runs FROM 
-(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS week, CONVERT(MAX(IFNULL(SUBSTRING(session_guid,38,2),'0')), UNSIGNED) AS runs FROM log
-GROUP BY WEEK, LEFT(session_guid, 37)) z
+LEFT JOIN
+(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK, COUNT(sentence) AS 修正规则 FROM feedback_eval
+WHERE evaluation = '修正规则'
 GROUP BY week) c
-ON a.week=c.week
-ORDER BY 1;
+ON a.week = c.week
+LEFT JOIN
+(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK, COUNT(sentence) AS 驳回 FROM feedback_eval
+WHERE evaluation = '驳回'
+GROUP BY week) d
+ON a.week = d.week
+LEFT JOIN
+(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK, COUNT(sentence) AS 真正误报 FROM feedback_eval
+WHERE evaluation = '误报'
+GROUP BY week) e
+ON a.week = e.week
+LEFT JOIN
+(SELECT WEEK, SUM(runs) AS 检查次数 FROM 
+(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS week, CONVERT(MAX(IFNULL(SUBSTRING(session_guid,38,2),'0')), UNSIGNED) AS runs FROM log_view
+GROUP BY log_view.WEEK, LEFT(session_guid, 37)) z
+GROUP BY week) f
+ON a.week=f.week;
 
+-- 误报处理概览
+SELECT 修正规则 + 驳回 + 误报 + 无效 AS 提交误报, 修正规则, 驳回, 误报, 无效 FROM
+(SELECT COUNT(*) AS 修正规则
+FROM feedback_eval
+WHERE evaluation = '修正规则') a
+JOIN
+(SELECT COUNT(*) AS 驳回
+FROM feedback_eval
+WHERE evaluation = '驳回') b
+JOIN
+(SELECT COUNT(*) AS 无效
+FROM feedback_eval
+WHERE evaluation = '无效') c
+JOIN
+(SELECT COUNT(*) AS 误报
+FROM feedback_eval
+WHERE evaluation = '误报') d;
+
+-- 具体误报_按城市
 SELECT check_date, location, sentence, rule_hit, datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK
 FROM log a LEFT JOIN ip_location b ON a.ip_location = b.ip
 WHERE feedback = 'false'
 ORDER BY 1;
--- AND datediff(check_date,'2020-06-26') DIV 7 + 1 IN (3,4,5);
 
+-- 检查的性能
 SELECT DISTINCT b.check_date, a.user_guid, a.session_guid, b.ip_location, c.location, word_count, check_type, 
 CASE
 	WHEN loading = 0 THEN 0
@@ -105,16 +143,37 @@ INNER JOIN log b ON a.user_guid = b.user_guid AND a.session_guid = b.session_gui
 LEFT JOIN ip_location c ON b.ip_location = c.ip
 ORDER BY b.check_date;
 
-SELECT * FROM log;
-
-SELECT * FROM perf;
-
+-- 缺失位置的IP
 SELECT DISTINCT ip_location AS missing_ip FROM log
 WHERE ip_location NOT IN (
 SELECT ip FROM ip_location);
 
--- insert into ip_location (ip, location) values ('103.43.85.193','中国香港');
+-- 误报条数_按城市
+SELECT WEEK, city, COUNT(feedback) 误报条数 FROM log_view
+WHERE feedback = 'false'
+GROUP BY WEEK, city
+ORDER BY 1, 3 DESC;
 
+-- 驳回误报_按城市
+SELECT a.check_date, location, a.sentence, a.rule_hit
+FROM log a INNER JOIN feedback_eval b
+ON a.sentence = b.sentence AND DATE(a.check_date) = DATE(b.check_date) AND a.rule_hit = b.rule_hit
+LEFT JOIN ip_location c
+ON a.ip_location = c.ip
+WHERE evaluation = '驳回'
+AND a.feedback = 'false';
+
+/*
+insert into ip_location (ip, location) values ('119.94.185.182','菲律宾马尼拉');
+insert into ip_location (ip, location) values ('211.97.108.70','福建仓山');
+insert into ip_location (ip, location) values ('120.243.223.51','安徽宣城');
+insert into ip_location (ip, location) values ('42.120.72.81','浙江杭州');
+insert into ip_location (ip, location) values ('117.136.86.31','陕西西安');
+insert into ip_location (ip, location) values ('120.243.223.51','安徽宣城');
+insert into ip_location (ip, location) values ('42.120.72.81','浙江杭州');
+*/
+
+-- SELECT COUNT(*) FROM ip_location;
 /*
 CREATE TABLE log_bak (
 check_date DATETIME,
