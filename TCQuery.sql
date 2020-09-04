@@ -53,8 +53,8 @@ SET session_guid = NULL
 WHERE session_guid = '';
 
 -- 整体概况
-SELECT a.WEEK, 用户数, 运行次数, 检查次数, 反馈条数, 误报条数, CONCAT(ROUND(误报条数*100/反馈条数, 2),'%') AS 误报率, 修正规则, 驳回, 真正误报,
-CONCAT(ROUND((真正误报+修正规则)*100/反馈条数, 2),'%') AS 修正误报率, 反馈条数-修正规则-真正误报 AS 发现问题 FROM
+SELECT a.WEEK, 用户数, 运行次数, 检查次数, 反馈条数, 误报条数, CONCAT(ROUND(误报条数*100/反馈条数, 2),'%') AS 误报率, IFNULL(修正规则,0) AS 修正规则, IFNULL(驳回, 0) AS 驳回, IFNULL(真正误报,0) AS 真正误报,
+CONCAT(ROUND((IFNULL(真正误报,0)+IFNULL(修正规则,0))*100/反馈条数, 2),'%') AS 修正误报率, 反馈条数-IFNULL(修正规则,0)-IFNULL(真正误报,0) AS 发现问题 FROM
 (SELECT WEEK,COUNT(sentence) AS 反馈条数, COUNT(DISTINCT user_guid) AS 用户数, COUNT(DISTINCT LEFT(session_guid, 37)) as 运行次数 FROM log_view
 GROUP BY WEEK) a
 LEFT JOIN
@@ -63,7 +63,7 @@ WHERE feedback = 'false'
 GROUP BY WEEK) b
 ON a.week = b.week
 LEFT JOIN
-(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK, COUNT(sentence) AS 修正规则 FROM feedback_eval
+(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS WEEK, count(sentence) AS 修正规则 FROM feedback_eval
 WHERE evaluation = '修正规则'
 GROUP BY week) c
 ON a.week = c.week
