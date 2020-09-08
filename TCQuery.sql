@@ -78,11 +78,11 @@ WHERE evaluation = '误报'
 GROUP BY week) e
 ON a.week = e.week
 LEFT JOIN
-(SELECT WEEK, SUM(runs) AS 检查次数 FROM 
-(SELECT datediff(check_date,'2020-06-26') DIV 7 + 1 AS week, CONVERT(MAX(IFNULL(SUBSTRING(session_guid,38,2),'0')), UNSIGNED) AS runs FROM log_view
-GROUP BY log_view.WEEK, LEFT(session_guid, 37)) z
+(SELECT week, SUM(runs) AS 检查次数 FROM 
+(SELECT week, MAX(runs) AS runs FROM log_view
+GROUP BY log_view.WEEK, session_guid) z
 GROUP BY week) f
-ON a.week=f.week;
+ON a.week = f.week;
 
 -- 误报处理概览
 SELECT 修正规则 + 驳回 + 误报 + 无效 AS 提交误报, 修正规则, 驳回, 误报, 无效 FROM
@@ -164,13 +164,12 @@ WHERE evaluation = '驳回'
 AND a.feedback = 'false';
 
 /*
-insert into ip_location (ip, location) values ('119.94.185.182','菲律宾马尼拉');
-insert into ip_location (ip, location) values ('211.97.108.70','福建仓山');
-insert into ip_location (ip, location) values ('120.243.223.51','安徽宣城');
-insert into ip_location (ip, location) values ('42.120.72.81','浙江杭州');
-insert into ip_location (ip, location) values ('117.136.86.31','陕西西安');
-insert into ip_location (ip, location) values ('120.243.223.51','安徽宣城');
-insert into ip_location (ip, location) values ('42.120.72.81','浙江杭州');
+insert into ip_location (ip, location) values ('106.11.34.44','北京北京');
+insert into ip_location (ip, location) values ('112.10.84.6','浙江杭州');
+insert into ip_location (ip, location) values ('36.47.138.238','陕西西安');
+insert into ip_location (ip, location) values ('218.24.198.35','辽宁大连');
+insert into ip_location (ip, location) values ('42.120.75.134','浙江杭州');
+insert into ip_location (ip, location) values ('171.217.92.205','四川成都');
 */
 
 -- SELECT COUNT(*) FROM ip_location;
@@ -212,4 +211,14 @@ ALTER TABLE log ADD id INT;
 ALTER TABLE log CHANGE id id int NOT NULL AUTO_INCREMENT PRIMARY KEY;
 
 DROP TABLE log_bak;
+
+
+-- log_view
+SELECT id, check_date, CONCAT(CAST(YEAR(check_date) AS CHAR(4)), '-', CAST(MONTH(check_date) AS CHAR(2))) AS month,
+(((TO_DAYS(check_date)-TO_DAYS('2020-06-26')) DIV 7) + 1) AS week, sentence, rule_hit, feedback, user_guid, LEFT(session_guid, 38) AS session_guid, LEFT(location, 2) AS province, RIGHT(location, 2) AS city,
+CONVERT(IFNULL(SUBSTRING(session_guid,38, 2), '0'), UNSIGNED) AS runs
+FROM log a LEFT JOIN ip_location b ON a.ip_location = b.ip
+WHERE sentence NOT IN
+(SELECT sentence FROM feedback_eval WHERE evaluation = '无效'
+AND a.rule_hit = rule_hit)
 */
