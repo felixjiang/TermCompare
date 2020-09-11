@@ -213,6 +213,114 @@ ON b.uid = d.uid
 WHERE evaluation = '驳回'
 AND a.feedback = 'false';
 
+-- 当前需要导出的误报
+SELECT WEEK, check_time, sentence, rule_hit
+FROM feedback_v2 a INNER JOIN user_session_v2 b
+ON a.sid = b.sid
+WHERE feedback = 'false'
+ORDER BY check_time;
+
+-- 查找没能匹配误报处理结果的误报_1。指定最后误报处理时间
+SELECT WEEK, check_time, sentence, rule_hit
+FROM feedback_v2 a INNER JOIN user_session_v2 b
+ON a.sid = b.sid
+WHERE feedback = 'false'
+AND NOT EXISTS (
+SELECT sentence FROM feedback_eval c
+WHERE c.sentence = a.sentence AND c.rule_hit = a.rule_hit)
+AND check_time <= STR_TO_DATE('9/7/2020 15:09', '%m/%d/%Y %H:%i:%s')
+ORDER BY check_time;
+-- 查找没能匹配误报处理结果的误报_2
+SELECT * FROM feedback_eval
+WHERE sentence LIKE '%aaaaaaaaa%';
+
+-- 每周 top 5 问题附带例句和规则详细信息
+-- 定位每周 top 5 问题
+TRUNCATE TABLE top_hit_rules_by_week;
+SET @num:=0, @WEEK:='';
+INSERT INTO top_hit_rules_by_week
+SELECT WEEK, rule_hit, hits
+FROM (
+SELECT WEEK, rule_hit, hits, @num := if(@WEEK = week,@num +1,1) AS ROW_NUMBER, @WEEK := week AS dummy 
+FROM (
+SELECT WEEK, rule_hit, COUNT(sentence) AS hits FROM (
+SELECT DISTINCT * FROM (
+SELECT WEEK, sentence, rule_hit
+FROM overview_v2 a
+WHERE feedback = 'false'
+AND EXISTS (
+SELECT sentence FROM feedback_eval b
+WHERE a.sentence = b.sentence
+AND a.rule_hit = b.rule_hit
+AND evaluation = '驳回' )
+UNION
+SELECT WEEK, sentence, rule_hit
+FROM overview_v2
+WHERE feedback = 'true'
+UNION
+SELECT WEEK, sentence, rule_hit
+FROM log_view a
+WHERE feedback = 'false'
+AND check_date >= STR_TO_DATE('2020-07-15 15:18:09', '%Y-%m-%d %H:%i:%s')
+AND EXISTS (
+SELECT sentence FROM feedback_eval b
+WHERE a.sentence = b.sentence
+AND a.rule_hit = b.rule_hit
+AND evaluation = '驳回')
+UNION
+SELECT WEEK, sentence, rule_hit
+FROM log_view
+WHERE feedback = 'true'
+AND check_date >= STR_TO_DATE('2020-07-15 15:18:09', '%Y-%m-%d %H:%i:%s')) a) b
+GROUP BY WEEK, rule_hit) c
+ORDER BY 1, 3 DESC) d
+WHERE d.row_number <= 5;
+-- 添加规则信息
+SET @num:=0, @WEEK:='';
+SELECT WEEK, sentence, rule_msg, correction, good_example, bad_example
+FROM (
+SELECT WEEK, rule_hit, sentence, rule_msg, correction, good_example, bad_example, @num := if(@WEEK = week,@num +1,1) AS ROW_NUMBER, @WEEK := week AS dummy 
+FROM (
+SELECT a.WEEK, a.rule_hit, sentence, rule_msg, correction, pos_example AS good_example, neg_example AS bad_example
+FROM top_hit_rules_by_week a INNER JOIN erroneous_sentence_by_week b
+ON a.WEEK = b.week
+AND a.rule_hit = b.rule_hit
+INNER JOIN rules c
+ON a.rule_hit = c.rule_id) x) y
+WHERE y.ROW_NUMBER <= 5
+
+-- 每周检测问题数量以及规则
+SELECT WEEK, rule_hit, COUNT(sentence) AS hits FROM (
+SELECT DISTINCT * FROM (
+SELECT WEEK, sentence, rule_hit
+FROM overview_v2 a
+WHERE feedback = 'false'
+AND EXISTS (
+SELECT sentence FROM feedback_eval b
+WHERE a.sentence = b.sentence
+AND a.rule_hit = b.rule_hit
+AND evaluation = '驳回' )
+UNION
+SELECT WEEK, sentence, rule_hit
+FROM overview_v2
+WHERE feedback = 'true'
+UNION
+SELECT WEEK, sentence, rule_hit
+FROM log_view a
+WHERE feedback = 'false'
+AND check_date >= STR_TO_DATE('2020-07-15 15:18:09', '%Y-%m-%d %H:%i:%s')
+AND EXISTS (
+SELECT sentence FROM feedback_eval b
+WHERE a.sentence = b.sentence
+AND a.rule_hit = b.rule_hit
+AND evaluation = '驳回')
+UNION
+SELECT WEEK, sentence, rule_hit
+FROM log_view
+WHERE feedback = 'true'
+AND check_date >= STR_TO_DATE('2020-07-15 15:18:09', '%Y-%m-%d %H:%i:%s')) a) b
+GROUP BY WEEK, rule_hit
+ORDER BY 1, 3 DESC
 /*
 -- log_view
 SELECT id, check_date, CONCAT(CAST(YEAR(check_date) AS CHAR(4)), '-', CAST(MONTH(check_date) AS CHAR(2))) AS month,
