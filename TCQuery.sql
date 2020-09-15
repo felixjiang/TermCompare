@@ -191,7 +191,10 @@ WHERE ip NOT IN (
 SELECT ip FROM ip_location_v2);
 
 /*
-insert into ip_location_v2 (ip, ctry_pr, city) values ('14.127.83.242','广东','深圳');
+insert into ip_location_v2 (ip, ctry_pr, city) values ('110.54.241.148','菲律宾','马尼拉');
+insert into ip_location_v2 (ip, ctry_pr, city) values ('119.6.98.246','四川','成都');
+insert into ip_location_v2 (ip, ctry_pr, city) values ('152.32.108.86','菲律宾','菲律宾');
+insert into ip_location_v2 (ip, ctry_pr, city) values ('220.166.230.98','四川','成都');
 */
 
 -- 误报条数_按城市
@@ -235,13 +238,13 @@ SELECT * FROM feedback_eval
 WHERE sentence LIKE '%aaaaaaaaa%';
 
 -- 每周 top 5 问题附带例句和规则详细信息
--- 定位每周 top 5 问题
+	-- 定位每周 top 5 问题
 TRUNCATE TABLE top_hit_rules_by_week;
 SET @num:=0, @WEEK:='';
 INSERT INTO top_hit_rules_by_week
 SELECT WEEK, rule_hit, hits
 FROM (
-SELECT WEEK, rule_hit, hits, @num := if(@WEEK = week,@num +1,1) AS ROW_NUMBER, @WEEK := week AS dummy 
+SELECT WEEK, rule_hit, hits, @num := if(@WEEK = WEEK, @num+1, 1) AS ROW_NUMBER, @WEEK := week AS dummy 
 FROM (
 SELECT WEEK, rule_hit, COUNT(sentence) AS hits FROM (
 SELECT DISTINCT * FROM (
@@ -275,9 +278,9 @@ AND check_date >= STR_TO_DATE('2020-07-15 15:18:09', '%Y-%m-%d %H:%i:%s')) a) b
 GROUP BY WEEK, rule_hit) c
 ORDER BY 1, 3 DESC) d
 WHERE d.row_number <= 5;
--- 添加规则信息
+-- 查询结果添加规则信息
 SET @num:=0, @WEEK:='';
-SELECT WEEK, sentence, rule_msg, correction, good_example, bad_example
+SELECT WEEK, sentence, rule_hit, rule_msg, correction, good_example, bad_example
 FROM (
 SELECT WEEK, rule_hit, sentence, rule_msg, correction, good_example, bad_example, @num := if(@WEEK = week,@num +1,1) AS ROW_NUMBER, @WEEK := week AS dummy 
 FROM (
@@ -286,8 +289,10 @@ FROM top_hit_rules_by_week a INNER JOIN erroneous_sentence_by_week b
 ON a.WEEK = b.week
 AND a.rule_hit = b.rule_hit
 INNER JOIN rules c
-ON a.rule_hit = c.rule_id) x) y
-WHERE y.ROW_NUMBER <= 5
+ON a.rule_hit = c.rule_id
+ORDER BY week) y) z
+WHERE ROW_NUMBER <= 5
+ORDER BY WEEK;
 
 -- 每周检测问题数量以及规则
 SELECT WEEK, rule_hit, COUNT(sentence) AS hits FROM (
@@ -320,7 +325,7 @@ FROM log_view
 WHERE feedback = 'true'
 AND check_date >= STR_TO_DATE('2020-07-15 15:18:09', '%Y-%m-%d %H:%i:%s')) a) b
 GROUP BY WEEK, rule_hit
-ORDER BY 1, 3 DESC
+ORDER BY 1, 3 DESC;
 /*
 -- log_view
 SELECT id, check_date, CONCAT(CAST(YEAR(check_date) AS CHAR(4)), '-', CAST(MONTH(check_date) AS CHAR(2))) AS month,
